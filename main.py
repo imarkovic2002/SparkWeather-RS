@@ -3,6 +3,8 @@ import pandas as pd
 
 weather_df = pd.read_csv("weather_data.csv", parse_dates=["datum"])
 
+# Izbacivanje nelogičnih podataka
+weather_df = weather_df[weather_df["temperatura"] <= 60]
 app = FastAPI()
 
 @app.get("/")
