@@ -28,6 +28,8 @@ def average_per_country(drzava:str):
     }
 
 @app.get("/filter")
-def filter_data(grad:str, godina:int):
-    df = weather_df [(weather_df["grad"].str.lower() == grad.lower()) & (weather_df["datum"].dt.year == godina) ]
+def filter_data(grad: str, godina: int):
+        df = weather_df [(weather_df["grad"].str.lower() == grad.lower()) & (weather_df["datum"].dt.year == godina) ]
+    if df.empty:
+        raise HTTPException(status_code=404, detail="Nema podataka za taj grad ili godinu.")
     return df.head(10).to_dict(orient="records")
