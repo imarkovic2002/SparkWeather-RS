@@ -6,6 +6,7 @@ from .spark_jobs import (
     get_warmest_days,
     get_variable_trend,
     filter_data_by_city_and_year,
+    get_median_temperature_by_country,
 )
 
 router = APIRouter()
@@ -58,3 +59,13 @@ def filter_by_city_and_year(grad: str, godina: int):
     if not result:
         raise HTTPException(status_code=404, detail="Nema podataka za taj grad i godinu.")
     return result
+
+@router.get("/median_country")
+def median_country(drzava: str):
+    result = get_median_temperature_by_country(drzava)
+    if result is None:
+        raise HTTPException(status_code=404, detail="Nema podataka za tu državu.")
+    return {
+        "država": drzava,
+        "medijan temperature": result
+    }

@@ -1,5 +1,5 @@
 from pyspark.sql import SparkSession
-from pyspark.sql.functions import col,avg,month, to_date, desc
+from pyspark.sql.functions import col,avg,month, to_date, desc, percentile_approx
 import os
 
 spark = SparkSession.builder \
@@ -58,3 +58,11 @@ def filter_data_by_city_and_year(grad: str, godina: int):
     if filtered.count() == 0:
         return []
     return [row.asDict() for row in filtered.limit(10).collect()]
+
+def get_median_temperature_by_country(drzava: str):
+    filtered = df.filter(col("država") == drzava)
+    if filtered.count() == 0:
+        return None
+    # Approximate median (50th percentile)
+    medijan = filtered.select(percentile_approx("temperatura", 0.5)).first()[0]
+    return round(medijan, 2)
