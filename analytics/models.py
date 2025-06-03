@@ -1,9 +1,13 @@
 from pydantic import BaseModel
+from typing import Dict
 
 class CountryTemperature(BaseModel):
-    država: str
-    prosječna_temperatura: float
+    drzava: str
+    prosjecna_temperatura: float
 
 class CountryMedian(BaseModel):
-    država: str
+    drzava: str
     medijan_temperatura: float
+
+class MonthlyAverageResponse(BaseModel):
+    mjesecne_vrijednosti: Dict[int, float]
