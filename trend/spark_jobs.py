@@ -1,10 +1,8 @@
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import to_date, col, avg
+from session.spark_session import get_spark_session
 from typing import Optional
 
-spark = SparkSession.builder\
-    .appName("SparkWeatherTrend")\
-    .getOrCreate()
+spark = get_spark_session()
 
 df = spark.read.csv("weather_data.csv", header=True, inferSchema=True)
 df = df.withColumn("datum", to_date(col("datum"), "yyyy-MM-dd"))

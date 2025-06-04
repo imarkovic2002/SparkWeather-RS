@@ -1,9 +1,7 @@
-from pyspark.sql import SparkSession
 from pyspark.sql.functions import col, avg, to_date, month, desc, percentile_approx
+from session.spark_session import get_spark_session
 
-spark = SparkSession.builder \
-    .appName("SparkWeather") \
-    .getOrCreate()
+spark = get_spark_session()
 
 # Učitavanje CSV datoteke
 df = spark.read.csv("weather_data.csv", header=True, inferSchema=True)
