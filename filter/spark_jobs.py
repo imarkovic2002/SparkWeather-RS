@@ -1,6 +1,6 @@
 from pyspark.sql.functions import to_date, col, year
 from session.spark_session import get_spark_session
-from filter.models import WeatherEntry, FilteredRangeResponse, ExtremeTemperatureResponse
+from filter.models import WeatherEntry, ExtremeTemperatureResponse
 import datetime
 
 spark = get_spark_session()
