@@ -1,5 +1,7 @@
-from pyspark.sql.functions import col, avg, to_date, month, desc, percentile_approx
+from pyspark.sql.functions import col, avg, to_date, month, min, max, count, percentile_approx,stddev, year
 from session.spark_session import get_spark_session
+from analytics.models import SummaryResponse, MonthlyAverage, TopCity
+
 
 spark = get_spark_session()
 
@@ -32,3 +34,55 @@ def get_monthly_avg_temperature(grad: str):
     mjesecni_prosjek = with_month.groupBy("mjesec").agg(avg("temperatura").alias("avg_temp"))
     results = mjesecni_prosjek.orderBy("mjesec").collect()
     return {row["mjesec"]: round(row["avg_temp"], 2) for row in results}
+
+
+def get_summary_statistics():
+    if df.limit(1).count() == 0:
+        return {"error": "Nema podataka."}
+
+    stats = df.select(
+        min("temperatura").alias("minimum"),
+        max("temperatura").alias("maksimum"),
+        avg("temperatura").alias("prosjek"),
+        stddev("temperatura").alias("standardna_devijacija")
+    ).collect()[0]
+
+    return {
+        "minimum": stats["minimum"],
+        "maksimum": stats["maksimum"],
+        "prosjek": round(stats["prosjek"], 2),
+        "standardna_devijacija": round(stats["standardna_devijacija"], 2)
+    }
+
+async def get_monthly_averages(godina: int):
+    df_filtered = df.filter(year("datum") == godina)
+    if df_filtered.count() == 0:
+        return []
+
+    df_monthly = df_filtered.withColumn("mjesec", month("datum"))
+    result_df = df_monthly.groupBy("mjesec").agg(
+        avg("temperatura").alias("prosjek")
+    ).orderBy("mjesec")
+
+    result = result_df.collect()
+    return [
+        MonthlyAverage(mjesec=row["mjesec"], prosjek=round(row["prosjek"], 2))
+        for row in result
+    ]
+
+async def get_top_cities(broj: int, godina: int, mjerenje: str):
+    if mjerenje not in df.columns:
+        return []
+
+    filtered = df.filter(year("datum") == godina)
+    if filtered.count() == 0:
+        return []
+
+    avg_df = filtered.groupBy("grad").agg(
+        avg(mjerenje).alias("prosjek")
+    ).orderBy(col("prosjek").desc()).limit(broj)
+
+    result = avg_df.collect()
+    return [TopCity(grad=row["grad"], prosjek=round(row["prosjek"], 2)) for row in result]
+
+    
