@@ -6,6 +6,7 @@ from .spark_jobs import (
     get_summary_statistics,
     get_monthly_averages,
     get_top_cities,
+    get_monthly_uv_index_stats,
 )
 from .models import (
     CountryTemperature,
@@ -15,7 +16,7 @@ from .models import (
     MonthlyAverage,
     TopCity
 )
-from typing import List
+from typing import List, Dict
 
 router = APIRouter()
 
@@ -48,7 +49,7 @@ async def summary_analytics():
     return result
 
 @router.get("/monthly-averages", response_model=List[MonthlyAverage])
-async def monthly_averages(godina: int = Query(..., ge=2019, le=2024)):
+async def monthly_averages(godina: int = Query(..., ge=2020, le=2024)):
     result = await get_monthly_averages(godina)
     if not result:
         raise HTTPException(status_code=404, detail=f"Nema podataka za godinu {godina}.")
@@ -64,3 +65,7 @@ async def top_cities(
     if not result:
         raise HTTPException(status_code=404, detail="Nema dostupnih podataka.")
     return result
+
+@router.get("/uv_index_stats", response_model=Dict[str, float])
+async def uv_index_stats( godina: int = Query(..., ge=2020, le=2024, description="Godina između 2020 i 2024")):
+    return await get_monthly_uv_index_stats(godina)

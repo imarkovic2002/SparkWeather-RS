@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from filter.spark_jobs import filter_by_city_and_year, get_extreme_temperatures
-from filter.models import WeatherEntry, ExtremeTemperatureResponse
+from filter.spark_jobs import filter_by_city_and_year, get_extreme_temperatures, get_weather_extremes
+from filter.models import WeatherEntry, ExtremeTemperatureResponse, WeatherExtremesResponse
 from typing import List
 
 router = APIRouter()
@@ -18,3 +18,7 @@ async def extreme_temperatures(grad: str):
     if result is None:
         raise HTTPException(status_code=404, detail="Grad nije pronađen.")
     return result
+
+@router.get("/weather_extremes", response_model=WeatherExtremesResponse)
+async def weather_extremes():
+    return await get_weather_extremes()

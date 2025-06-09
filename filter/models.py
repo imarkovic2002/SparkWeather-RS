@@ -12,3 +12,12 @@ class ExtremeTemperatureResponse(BaseModel):
     najnizi_dan: str
     najvisa_temp: float
     najvisi_dan: str
+
+class ExtremeWeatherMetric(BaseModel):
+    grad: str
+    vrijednost: float
+
+class WeatherExtremesResponse(BaseModel):
+    najniza_vidljivost: ExtremeWeatherMetric
+    najvise_oborina: ExtremeWeatherMetric
+    najveca_oblacnost: ExtremeWeatherMetric

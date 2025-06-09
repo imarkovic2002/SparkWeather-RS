@@ -85,4 +85,11 @@ async def get_top_cities(broj: int, godina: int, mjerenje: str):
     result = avg_df.collect()
     return [TopCity(grad=row["grad"], prosjek=round(row["prosjek"], 2)) for row in result]
 
-    
+# Statistika UV indeksa po mjesecima
+async def get_monthly_uv_index_stats(godina: int):
+    df_with_date = df.withColumn("mjesec", month(col("datum"))).withColumn("godina", year(col("datum")))
+    filtered_df = df_with_date.filter(col("godina") == godina)
+
+    stats = filtered_df.groupBy("mjesec").agg(avg("uv_index").alias("prosjek_uv"))
+    result = {str(row["mjesec"]): round(row["prosjek_uv"], 2) for row in stats.collect()}
+    return result
