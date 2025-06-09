@@ -1,6 +1,7 @@
 from fastapi import APIRouter, HTTPException, Query
-from trend.spark_jobs import get_variable_trend
-from trend.models import TrendResponse
+from trend.spark_jobs import get_variable_trend, get_multiple_variable_trends,get_weekly_trend
+from trend.models import TrendResponse, MultiTrendResponse
+from typing import Optional, List, Dict
 
 router = APIRouter()
 
@@ -13,3 +14,24 @@ def trend_vrijednosti(
     if result is None:
         raise HTTPException(status_code=400, detail="Nepostojeća varijabla ili grad.")
     return {"vrijednosti": result}
+
+@router.get("/multi_trend", response_model=MultiTrendResponse)
+def multi_trend(
+    varijable: List[str] = Query(..., description="Lista varijabli npr. temperatura, vlaga, tlak"),
+    grad: Optional[str] = Query(None, description="Naziv grada")
+):
+    result = get_multiple_variable_trends(varijable, grad)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Neke varijable nisu pronađene.")
+    if result == {}:
+        raise HTTPException(status_code=404, detail="Nema podataka za zadani grad.")
+    
+    return {"grad": grad if grad else "Svi gradovi", "trendovi": result}
+
+@router.get("trend/weekly", response_model = TrendResponse)
+def tjedni_trend(varijabla: str = Query(..., description="temperatura, tlak, vlaga"), 
+                 grad: Optional[str] = Query(None)):
+    result = get_weekly_trend(varijabla, grad)
+    if result is None:
+        raise HTTPException(status_code=400, detail="Varijabla ili grad ne postoji.")
+    return {"vrijednosti": result} 
