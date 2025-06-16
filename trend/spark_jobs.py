@@ -1,4 +1,4 @@
-from pyspark.sql.functions import to_date, col, avg, weekofyear
+from pyspark.sql.functions import to_date, col, avg, weekofyear, year
 from session.spark_session import get_spark_session
 from typing import Optional, List, Dict
 
@@ -43,12 +43,17 @@ def get_multiple_variable_trends(varijable: List[str], grad: Optional[str] = Non
 
     return trendovi
 
-def get_weekly_trend(varijabla: str, grad: Optional[str] = None):
+def get_weekly_trend(varijabla: str, grad: Optional[str] = None, godina: Optional[int] = None):
     if varijabla not in df.columns: 
         return None
     data = df
     if grad:
         data = data.filter(col("grad") == grad)
+
+    if godina:
+        data = data.withColumn("godina", year(col("datum")))
+        data = data.filter(col("godina") == godina)
+
         if data.count() == 0:
             return None
         data = data.withColumn("tjedan", weekofyear("datum"))

@@ -58,7 +58,7 @@ async def monthly_averages(godina: int = Query(..., ge=2020, le=2024)):
 @router.get("/top_cities", response_model=List[TopCity])
 async def top_cities(
     broj: int = Query(5, ge=1, le=50),
-    godina: int = Query(..., ge=2019, le=2024),
+    godina: int = Query(..., ge=2020, le=2024),
     mjerenje: str = Query("temperatura", regex="^(temperatura|vlaga|tlak|oborine)$")
 ):
     result = await get_top_cities(broj, godina, mjerenje)

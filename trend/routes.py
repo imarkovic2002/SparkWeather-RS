@@ -30,8 +30,10 @@ def multi_trend(
 
 @router.get("trend/weekly", response_model = TrendResponse)
 def tjedni_trend(varijabla: str = Query(..., description="temperatura, tlak, vlaga"), 
-                 grad: Optional[str] = Query(None)):
-    result = get_weekly_trend(varijabla, grad)
+                 grad: Optional[str] = Query(None),
+                 godina: Optional[int] = Query(None, description="npr. 2021")
+                 ):
+    result = get_weekly_trend(varijabla, grad, godina)
     if result is None:
-        raise HTTPException(status_code=400, detail="Varijabla ili grad ne postoji.")
+        raise HTTPException(status_code=400, detail="Varijabla ili grad ne postoji. Ili ne postoje podaci za tu godinu")
     return {"vrijednosti": result} 

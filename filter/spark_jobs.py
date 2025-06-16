@@ -59,3 +59,13 @@ async def get_weather_extremes():
         najvise_oborina=ExtremeWeatherMetric(grad=row_oborine["grad"], vrijednost=row_oborine["oborine"]),
         najveca_oblacnost=ExtremeWeatherMetric(grad=row_oblacnost["grad"], vrijednost=row_oblacnost["oblacnost"])
     )
+
+async def remove_extreme_temperatures(min_temp: float, max_temp: float):
+    global df
+    before_count = df.count()
+
+    df = df.filter((col("temperatura") <= max_temp) & (col("temperatura") >= min_temp))
+
+    after_count = df.count()
+    broj_brisanih = before_count - after_count
+    return broj_brisanih

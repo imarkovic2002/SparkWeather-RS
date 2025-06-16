@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException
-from filter.spark_jobs import filter_by_city_and_year, get_extreme_temperatures, get_weather_extremes
+from filter.spark_jobs import filter_by_city_and_year, get_extreme_temperatures, get_weather_extremes, remove_extreme_temperatures
 from filter.models import WeatherEntry, ExtremeTemperatureResponse, WeatherExtremesResponse
 from typing import List
 
@@ -22,3 +22,8 @@ async def extreme_temperatures(grad: str):
 @router.get("/weather_extremes", response_model=WeatherExtremesResponse)
 async def weather_extremes():
     return await get_weather_extremes()
+
+@router.delete("/delete/extreme-temperatures")
+async def delete_extreme_temperatures(threshold_high: float = 60.0, threshold_low: float = -50.0):
+    broj_brisanih = await remove_extreme_temperatures(threshold_low, threshold_high)
+    return {"poruka": f"Obrisano je {broj_brisanih} zapisa s ekstremnim temperaturama."}
