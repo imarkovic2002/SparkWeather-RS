@@ -1,0 +1,38 @@
+version: '3.8'
+
+services:
+  analytics:
+    build:
+      context: ./analytics
+    container_name: analytics
+    ports:
+      - "8001:8000"
+    restart: unless-stopped
+
+  filter:
+    build:
+      context: ./filter
+    container_name: filter
+    ports:
+      - "8002:8000"
+    restart: unless-stopped
+
+  trend:
+    build:
+      context: ./trend
+    container_name: trend
+    ports:
+      - "8003:8000"
+    restart: unless-stopped
+
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+      - "80:80"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+    depends_on:
+      - analytics
+      - filter
+      - trend
