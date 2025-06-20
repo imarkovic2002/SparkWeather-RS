@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException
-from filter.spark_jobs import filter_by_city_and_year, get_extreme_temperatures, get_weather_extremes, remove_extreme_temperatures
-from filter.models import WeatherEntry, ExtremeTemperatureResponse, WeatherExtremesResponse
+from spark_jobs import filter_by_city_and_year, get_extreme_temperatures, get_weather_extremes, remove_extreme_temperatures
+from models import WeatherEntry, ExtremeTemperatureResponse, WeatherExtremesResponse
 from typing import List
 
 router = APIRouter()

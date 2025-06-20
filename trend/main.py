@@ -1,0 +1,9 @@
+from fastapi import FastAPI
+from routes import router as trend_router
+
+app = FastAPI(
+    title="Trend Microservice",
+    description="Mikroservis za praćenja trenda vremenskih podataka."
+)
+
+app.include_router(trend_router, prefix="/trend", tags=["Trend"])

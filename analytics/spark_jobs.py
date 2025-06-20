@@ -1,6 +1,6 @@
 from pyspark.sql.functions import col, avg, to_date, month, min, max, count, percentile_approx,stddev, year
 from session.spark_session import get_spark_session
-from analytics.models import SummaryResponse, MonthlyAverage, TopCity
+from models import SummaryResponse, MonthlyAverage, TopCity
 
 
 spark = get_spark_session()

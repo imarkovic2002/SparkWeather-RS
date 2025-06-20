@@ -1,6 +1,6 @@
 from fastapi import APIRouter, HTTPException, Query
-from trend.spark_jobs import get_variable_trend, get_multiple_variable_trends,get_weekly_trend
-from trend.models import TrendResponse, MultiTrendResponse
+from spark_jobs import get_variable_trend, get_multiple_variable_trends,get_weekly_trend
+from models import TrendResponse, MultiTrendResponse
 from typing import Optional, List, Dict
 
 router = APIRouter()

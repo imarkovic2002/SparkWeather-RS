@@ -1,5 +1,5 @@
 from fastapi import APIRouter, HTTPException, Query
-from .spark_jobs import (
+from spark_jobs import (
     get_average_by_country,
     get_median_temperature_by_country,
     get_monthly_avg_temperature,
@@ -8,7 +8,7 @@ from .spark_jobs import (
     get_top_cities,
     get_monthly_uv_index_stats,
 )
-from .models import (
+from models import (
     CountryTemperature,
     CountryMedian,
     MonthlyAverageResponse,
