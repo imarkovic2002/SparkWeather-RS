@@ -5,7 +5,7 @@ from typing import List
 
 router = APIRouter()
 
-@router.get("/filter", response_model=list[WeatherEntry])
+@router.get("/", response_model=list[WeatherEntry])
 def filter_weather_data(grad: str, godina: int):
     result = filter_by_city_and_year(grad, godina)
     if not result:

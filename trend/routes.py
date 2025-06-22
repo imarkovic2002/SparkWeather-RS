@@ -5,7 +5,7 @@ from typing import Optional, List, Dict
 
 router = APIRouter()
 
-@router.get("/trend", response_model=TrendResponse)
+@router.get("/", response_model=TrendResponse)
 def trend_vrijednosti( 
     varijabla: str = Query(..., description="npr. temperatura, vlaga, tlak"),
     grad: str = Query(None)
@@ -28,7 +28,7 @@ def multi_trend(
     
     return {"grad": grad if grad else "Svi gradovi", "trendovi": result}
 
-@router.get("trend/weekly", response_model = TrendResponse)
+@router.get("/weekly", response_model = TrendResponse)
 def tjedni_trend(varijabla: str = Query(..., description="temperatura, tlak, vlaga"), 
                  grad: Optional[str] = Query(None),
                  godina: Optional[int] = Query(None, description="npr. 2021")
