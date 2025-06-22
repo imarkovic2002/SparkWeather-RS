@@ -1,17 +1,30 @@
 # SparkWeather
 
-**SparkWeather** je distribuirana aplikacija za analizu i upravljanje vremenskim podacima koristeći **FastAPI**, **PySpark** i **cloud-native DynamoDB** (emuliran pomoću LocalStacka). Aplikacija učitava podatke iz CSV datoteke i omogućuje analizu, filtriranje, brisanje i vizualizaciju vremenskih podataka putem REST API-ja.
+**SparkWeather** je aplikacija koju je razvijena da se pokaže kako se vremenski podaci mogu analizirati i obrađivati pomoću distribuiranog sustava temeljenog na FastAPI-ju i PySparku. Projekt se sastoji od tri mikroservisa – `analytics`, `filter` i `trend` – a svaki od njih ima specifičnu ulogu. Za povezivanje i usmjeravanje prometa koristi se NGINX kao reverse proxy.
+
+Cilj je bio učitati podatke iz CSV datoteke i omogućiti njihovu analizu kroz REST API-je, uz podršku za Docker i jednostavno pokretanje svih servisa.
 
 ---
 
-## Značajke
+## Ključne značajke
 
-- REST API razvijen u FastAPI-u
-- Obrada podataka pomoću PySparka
-- Podrška za cloud-native bazu (DynamoDB preko LocalStacka)
-- Učitavanje velikih CSV datoteka
-- GET i DELETE rute za dohvat i brisanje
-- Docker & Docker Compose podrška
+- Modularna mikroservisna arhitektura (analytics, filter, trend)
+- Brza obrada podataka pomoću **Apache Spark** (PySpark)
+- Analitika: prosjek, medijan, sažeci, mjesečne agregacije, trendovi
+- Filtriranje vremenskih podataka po godini, gradu, vremenskom rasponu i ekstremima
+- Detekcija vremenskih trendova po tjednima, mjesecima i varijablama
+- Potpuna podrška za **Docker** i **Docker Compose**
+- Reverse proxy pomoću **NGINX** s fallback mehanizmima
+
+---
+
+## Mikroservisi
+
+| Mikroservis | Opis funkcionalnosti |
+|-------------|----------------------|
+| `analytics` | Agregacije i sažeci vremenskih podataka |
+| `filter`    | Filtriranje po godini, gradu, rasponu i ekstremima |
+| `trend`     | Detekcija trendova za vremenske varijable |
 
 ---
 
@@ -19,48 +32,51 @@
 
 - Python 3.11
 - FastAPI
-- PySpark
-- DynamoDB (LocalStack)
-- Docker, Docker Compose
+- Apache Spark (PySpark)
+- Docker & Docker Compose
+- NGINX (reverse proxy)
 
---- 
-## Struktura podataka (CSV)
+---
 
-CSV datoteka mora sadržavati sljedeće stupce:
-- datum
-- država
-- grad
-- temperatura
-- vjetar
-- tlak
-- vlaga
-- UV_index
-- oborine
-- vidljivost
-- oblacnost
-- smjer_vjetra
-- kategorija
-- opis
+## CSV datoteka
 
-## Pokretanje projekta
+Svi podaci dolaze iz `weather_data.csv` datoteke. Svaki mikroservis ima vlastitu kopiju datoteke. Očekuje se da CSV sadrži sljedeće stupce:
+
+- datum  
+- država  
+- grad  
+- temperatura  
+- vjetar  
+- tlak  
+- vlaga  
+- UV_index  
+- oborine  
+- vidljivost  
+- oblacnost  
+- smjer_vjetra  
+- kategorija  
+- opis  
+
+---
+
+## Kako pokrenuti projekt?
 
 1. Kloniraj repozitorij:
 
-```bash
-git clone https://github.com/imarkovic2002/SparkWeather-RS
-cd SparkWeather
-```
+    ```bash
+    git clone https://github.com/imarkovic2002/SparkWeather-RS.git
+    ```
+    ```bash
+    cd SparkWeather-RS
+    
+2. Pokreni sve servise odjednom (potrebno je imati instaliran Docker i Docker Compose):
+    ```bash
+    docker-compose up --build
 
-2. Pokreni aplikaciju i bazu
-```bash
-```
+3. Kad je sve spremno, dokumentaciji svakog servisa možeš pristupiti putem preglednika:
 
-3. Učitaj CSV podatke u DynamoDB
-```bash
-```
+- http://localhost/analytics/docs  
+- http://localhost/filter/docs  
+- http://localhost/trend/docs  
 
-## API dokumentacija
-Nakon pokretanja, pristupi FastAPI dokumentaciji:
-```bash
-http://localhost:8000/docs
-```
+---
