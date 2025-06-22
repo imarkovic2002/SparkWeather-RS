@@ -1,6 +1,6 @@
 # SparkWeather
 
-**SparkWeather** je aplikacija koju je razvijena da se pokaže kako se vremenski podaci mogu analizirati i obrađivati pomoću distribuiranog sustava temeljenog na FastAPI-ju i PySparku. Projekt se sastoji od tri mikroservisa – `analytics`, `filter` i `trend` – a svaki od njih ima specifičnu ulogu. Za povezivanje i usmjeravanje prometa koristi se NGINX kao reverse proxy.
+**SparkWeather** je aplikacija koja je razvijena da se pokaže kako se vremenski podaci mogu analizirati i obrađivati pomoću distribuiranog sustava temeljenog na FastAPI-ju i PySparku. Projekt se sastoji od tri mikroservisa – `analytics`, `filter` i `trend` – a svaki od njih ima specifičnu ulogu. Za povezivanje i usmjeravanje prometa koristi se NGINX kao reverse proxy.
 
 Cilj je bio učitati podatke iz CSV datoteke i omogućiti njihovu analizu kroz REST API-je, uz podršku za Docker i jednostavno pokretanje svih servisa.
 
@@ -20,11 +20,11 @@ Cilj je bio učitati podatke iz CSV datoteke i omogućiti njihovu analizu kroz R
 
 ## Mikroservisi
 
-| Mikroservis | Opis funkcionalnosti |
-|-------------|----------------------|
-| `analytics` | Agregacije i sažeci vremenskih podataka |
+| Mikroservis | Opis funkcionalnosti                               |
+| ----------- | -------------------------------------------------- |
+| `analytics` | Agregacije i sažeci vremenskih podataka            |
 | `filter`    | Filtriranje po godini, gradu, rasponu i ekstremima |
-| `trend`     | Detekcija trendova za vremenske varijable |
+| `trend`     | Detekcija trendova za vremenske varijable          |
 
 ---
 
@@ -42,20 +42,20 @@ Cilj je bio učitati podatke iz CSV datoteke i omogućiti njihovu analizu kroz R
 
 Svi podaci dolaze iz `weather_data.csv` datoteke. Svaki mikroservis ima vlastitu kopiju datoteke. Očekuje se da CSV sadrži sljedeće stupce:
 
-- datum  
-- država  
-- grad  
-- temperatura  
-- vjetar  
-- tlak  
-- vlaga  
-- UV_index  
-- oborine  
-- vidljivost  
-- oblacnost  
-- smjer_vjetra  
-- kategorija  
-- opis  
+- datum
+- država
+- grad
+- temperatura
+- vjetar
+- tlak
+- vlaga
+- UV_index
+- oborine
+- vidljivost
+- oblacnost
+- smjer_vjetra
+- kategorija
+- opis
 
 ---
 
@@ -63,20 +63,26 @@ Svi podaci dolaze iz `weather_data.csv` datoteke. Svaki mikroservis ima vlastitu
 
 1. Kloniraj repozitorij:
 
-    ```bash
-    git clone https://github.com/imarkovic2002/SparkWeather-RS.git
-    ```
-    ```bash
-    cd SparkWeather-RS
-    
+   ```bash
+   git clone https://github.com/imarkovic2002/SparkWeather-RS.git
+   ```
+
+   ```bash
+   cd SparkWeather-RS
+
+   ```
+
 2. Pokreni sve servise odjednom (potrebno je imati instaliran Docker i Docker Compose):
-    ```bash
-    docker-compose up --build
+
+   ```bash
+   docker-compose up --build
+
+   ```
 
 3. Kad je sve spremno, dokumentaciji svakog servisa možeš pristupiti putem preglednika:
 
-- http://localhost/analytics/docs  
-- http://localhost/filter/docs  
-- http://localhost/trend/docs  
+- http://localhost/analytics/docs
+- http://localhost/filter/docs
+- http://localhost/trend/docs
 
 ---
